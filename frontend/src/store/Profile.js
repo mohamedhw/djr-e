@@ -21,8 +21,8 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
         user_update(username)
     }
     return (
-        <div>
-            <div className="continer">
+        <div className="container">
+            <div>
                 <h1>{username_global}</h1>
             </div>
             <div>
@@ -36,7 +36,7 @@ const Profile = ({ profile, profile_update, user_update, username_global, image_
                         <input className='form-control' type='file' placeholder={`${username_global}`} name='image' onChange={e => setImage(e.target.files[0]) } />
                     </div>
 
-                    <button type="submit" className='btn btn-primary mt-3'>Update</button>
+                    <button type="submit" className='btn btn-primary mt-2 mx-3'>Update</button>
                 </form>
             </div>
 

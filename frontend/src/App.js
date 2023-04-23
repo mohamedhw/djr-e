@@ -15,9 +15,10 @@ function App() {
   const [q, setQ] = useState(null)
 
   return (
+    
     <div className="App">
       <LayOut>
-        <NavBar setQ={setQ} />      
+        <NavBar setQ={setQ} />
         <Routes>
           <Route element={<PrivetRoute/>}>
           </Route>
