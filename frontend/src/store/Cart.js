@@ -80,18 +80,14 @@ const Cart = () => {
 
                                                 </tr>
                                         </tbody>
-                                        <div className="container">
-                                            <div className="row">
-                                                <div className="col-md-12 bg-light text-right bg-light clearfix" style={{'width': '100%'}}>
-                                                    <Link className="btn btn-warning float-right" to="#">Checkout</Link>
-                                                    <Link className="btn btn-primary float-right" to="#">Continue shopping</Link>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </table>
                             
                                 </div>
 
+                                <div className="col-md-12 col-sm-12 d-flex justify-content-end p-4" style={{'width': '100%'}}>
+                                    <Link className="btn btn-warning ml-auto mr-auto p-2 mx-2" to="#">Checkout</Link>
+                                    <Link className="btn btn-primary ml-auto mr-auto p-2 mx-2" to="#">Continue shopping</Link>
+                                </div>
                             </div>
                         </main>                                
                     </div>
