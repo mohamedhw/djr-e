@@ -1,7 +1,7 @@
 from .models import Item, Order, OrderItem
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-from .serializers import ItemSerializers, OrderSerializers, OrderItemSerializers, TaskSerializer
+from .serializers import ItemSerializers, CartItemSerializer, Task_extendedSerializer, OrderSerializers, OrderItemSerializers, TaskSerializer, JoinTaskSerializer
 from rest_framework import generics, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -22,19 +22,32 @@ class Detail(generics.RetrieveAPIView):
     lookup_field = 'pk'
 
 
-# @method_decorator(ensure_csrf_cookie, name='dispatch')
+
 @api_view(["GET"])
 def cart_view(request, *args, **kwargs):
-    try:
-        order_l = []
-        order = Order.objects.get(user=request.user, ordered = False)
-        for i in order.items.all():
-            order_ = TaskSerializer(order, many=True).data
-            print(order_)
-            order_l.append(order_)
-        return Response({"serialized": order_})
-    except:
-        return Response({"error": "error"})
+
+    orders = Order.objects.get(user=request.user, ordered=False)
+
+    l = []
+    for i in orders.items.all():
+
+        if i.item.discount_price:
+            price = i.item.discount_price
+        else:
+            price = i.item.price
+
+        quantity = i.quantity
+        name = i.item.title
+        
+        context = {
+            'price' : price,
+            'quantity': quantity,
+            'name': name
+        }
+        l.append(context)
+    serializer = CartItemSerializer(l, many=True).data
+    return Response(serializer)
+
 
 
 @api_view(["POST", "GET"])

@@ -4,7 +4,17 @@ from .models import Item, OrderItem, Order
 
 
 
+class CartItemSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    price = serializers.IntegerField()
+    quantity = serializers.IntegerField()
 
+    def to_representation(self, instance):
+        return {
+            'name': instance['name'],
+            'price': instance['price'],
+            'quantity': instance['quantity']
+        }
 
 class ItemSerializers(serializers.ModelSerializer):
     class Meta:
@@ -19,16 +29,27 @@ class OrderItemSerializers(serializers.ModelSerializer):
         fields = ['get_item_final_price']
 
 class Task_extendedSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = OrderItem
-        fields = ['quantity', 'get_total_discount_price', 'get_total_price']
+        fields = ['price', 'name', 'quantity']
 
-class TaskSerializer(serializers.ModelSerializer):
-    task_extendeds = Task_extendedSerializer(many=True)
-    
+class TaskSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Order
         fields = ['get_total']
+
+class JoinTaskSerializer(serializers.Serializer):
+    model1 = Task_extendedSerializer(read_only=True)
+    model2 = TaskSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        model1 = OrderItem.objects.get(id=instance.id)
+        model2 = Order.objects.get(id=instance.id)
+        return {
+            'model1': Task_extendedSerializer(model1).data,
+            'model2': TaskSerializer(model2).data
+        }
 
 
 

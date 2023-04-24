@@ -51,7 +51,7 @@ const Detail = () => {
 
                                 <p className="lead font-weight-bold">Description</p>
 
-                                <p>{ item.description }</p>
+                                <p className="p-2">{ item.description }</p>
 
                                 {/* <!-- <form className="d-flex justify-content-left">
                                 <input type="number" value="1" aria-label="Search" className="form-control" style="width: 100px">
