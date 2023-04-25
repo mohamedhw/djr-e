@@ -1,9 +1,11 @@
 import { useFetch } from "../useFetch"
 import { useParams } from "react-router-dom"
-// import {connect} from 'react-redux'
+import {connect} from 'react-redux'
+import AddToCart from './Addtocart'
+import AddToWish from "./Wish"
+import { useEffect } from "react"
 
-
-const Detail = () => {
+const Detail = ({user_g}) => {
     const {postId} = useParams()
     const {data:item, isLoading, handleError} = useFetch(`http://localhost:8000/api-item/${postId}/`)
     // const logedin_view = (
@@ -12,11 +14,14 @@ const Detail = () => {
     //         {/* <Link classNameName="btn btn-danger m-1" to={`/post-delete/${postId}`}>Delete</Link> */}
     //     </div>
     // )
+    let wish_x = ""
+    item && console.log(item.get_wished)
     return (
         <div>
             {/* {handleError && {handleError}} */}
             {isLoading && <h1>Loading...</h1>}
             {item && 
+            
                 <div>
                     <main className="mt-5 pt-4">
                         <div className="container dark-grey-text mt-5">
@@ -60,9 +65,8 @@ const Detail = () => {
                                 </button>
                                 </form> --> */}
                                 {/* <a href="{{ item.get_add_to_cart_url }}"> */}
-                                <button className="btn btn-primary btn-md my-0 p" >Add to cart
-                                    <i className="fas fa-shopping-cart ml-1"></i>
-                                </button>
+                                <AddToCart pk={postId}/>
+                                <AddToWish pk={postId} wish_x={wish_x}/>
                                 {/* </a> */}
                                 {/* <a href="{% url 'store:remove_item' item.pk %}"> */}
                                 <button className="btn btn-danger btn-md my-0 p mx-1" >Remove from cart
@@ -120,10 +124,10 @@ const Detail = () => {
 }
 
 
-// const mapStateToProps = state => ({
-//     username_g : state.profile.username,
-// })
+const mapStateToProps = state => ({
+    user_g : state.profile.user,
+})
 
-// export default connect(mapStateToProps,{})(Detail)
+export default connect(mapStateToProps,{})(Detail)
 
-export default Detail
+// export default Detail

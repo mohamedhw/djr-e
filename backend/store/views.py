@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions, authentication
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils.decorators import method_decorator
-
+from django.views.decorators.csrf import csrf_exempt # new
 
 class Home(generics.ListAPIView):
     queryset = Item.objects.all()
@@ -21,7 +21,30 @@ class Detail(generics.RetrieveAPIView):
     serializer_class = ItemSerializers
     lookup_field = 'pk'
 
+# WISH LIST VIEWS
 
+class WishList(generics.ListAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializers
+
+    def get_queryset(self):
+        user = self.request.user
+        qs = user.wish.all()
+
+        return qs
+
+@api_view(["POST"])
+def add_wish(request, pk):
+    try:
+        post = Item.objects.get(pk=pk)
+        if request.user in post.wish.all():
+            post.wish.remove(request.user)
+            return Response({'success': "Item added to wish list", "wished": False})
+        else:
+            post.wish.add(request.user)
+            return Response({'success': "Item remove from wish list", "wished": True})
+    except:
+        return Response({"error": "error"})
 
 @api_view(["GET"])
 def cart_view(request, *args, **kwargs):
@@ -48,9 +71,7 @@ def cart_view(request, *args, **kwargs):
     serializer = CartItemSerializer(l, many=True).data
     return Response(serializer)
 
-
-
-@api_view(["POST", "GET"])
+@api_view(["POST"])
 def add_to_cart(request, pk):
     item = get_object_or_404(Item, id=pk)
     order_item, created = OrderItem.objects.get_or_create(

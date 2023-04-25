@@ -10,6 +10,7 @@ import Register from "./store/Register"
 import Profile from "./store/Profile"
 import Detail from "./store/Detail"
 import Cart from './store/Cart';
+import WishList from './store/WishList';
 
 function App() {
   const [q, setQ] = useState(null)
@@ -23,6 +24,7 @@ function App() {
           <Route element={<PrivetRoute/>}>
           </Route>
           <Route path='/:postId' element={<Detail />} />
+          <Route path='/wish' element={<WishList />} />
           <Route path='/cart' element={<Cart/>} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/login' element={<Login/>} />
